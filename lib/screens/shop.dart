@@ -10,11 +10,9 @@ import 'package:nectar/widgets/custom_text.dart';
 class Shop extends StatelessWidget {
   const Shop({super.key, required this.zones});
   final String zones;
- 
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -23,15 +21,14 @@ class Shop extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Gap(10),
-              SvgPicture.asset("assets/svgs/Group.svg",width: 30,),
+              SvgPicture.asset("assets/svgs/Group.svg", width: 30),
               Gap(20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset("assets/svgs/Exclude.svg",width: 20,),
-                  Gap(5),
-                  CustomText(text: zones, color: Color(0xff4C4F4D))
-
+                  SvgPicture.asset("assets/svgs/Exclude.svg", width: 20),
+                  Gap(10),
+                  CustomText(text: zones, color: Color(0xff4C4F4D)),
                 ],
               ),
 
@@ -61,23 +58,27 @@ class Shop extends StatelessWidget {
                 ],
               ),
               Gap(20),
-            GridView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              shrinkWrap: true,
-              itemCount: ProductModel.products.length,
+              GridView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                shrinkWrap: true,
+                itemCount: ProductModel.products.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  crossAxisCount: 2,
                   childAspectRatio: 0.9,
                   crossAxisSpacing: 5,
                 ),
-                itemBuilder: (context,index){
-                final item = ProductModel.products[index];
-                return CustomCart(image: item.image, desc: item.desc, name: item.name, qty: item.qty, price: item.price, );
-
-                }
-            )
-              
-
+                itemBuilder: (context, index) {
+                  final item = ProductModel.products[index];
+                  return CustomCart(
+                    image: item.image,
+                    desc: item.desc,
+                    name: item.name,
+                    qty: item.qty,
+                    price: item.price,
+                    nutritions: item.nutritious,
+                  );
+                },
+              ),
             ],
           ),
         ),

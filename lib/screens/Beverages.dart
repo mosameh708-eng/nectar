@@ -51,7 +51,7 @@ class Beverages extends StatelessWidget {
                         qty: 1,
                         price: 15,
                         bordercolor: Colors.blueGrey,
-                        containercolor: Colors.white,
+                        containercolor: Colors.white, nutritions: '',
                       ),
                     ),
                   );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:nectar/root/shop.dart';
+import 'package:nectar/screens/shop.dart';
 import 'package:nectar/widgets/Custom_button.dart';
 import 'package:nectar/widgets/custom_text.dart';
 
@@ -43,10 +43,8 @@ class OrderAccepted extends StatelessWidget {
             ),
             Gap(10),
             GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (c) => Shop()),
-              ),
+              onTap: () {},
+
               child: CustomText(text: "Back to home", color: Colors.black),
             ),
           ],

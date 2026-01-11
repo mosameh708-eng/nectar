@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:nectar/screens/shop.dart';
 import 'package:nectar/widgets/Custom_button.dart';
 import 'package:nectar/widgets/custom_text.dart';
 
@@ -53,7 +54,7 @@ class _CartState extends State<Favourite> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // الاسم + delete icon
+
                               Row(
                                 children: [
                                   Expanded(
@@ -172,9 +173,9 @@ Widget buildFailedDialog(BuildContext context) {
             ),
           ),
 
-          Image.asset("assets/failed.png", width: 150, height: 150),
+          Image.asset("assets/logo/image 13.png", width: 150, height: 150),
 
-          SizedBox(height: 20),
+          Gap(20),
 
           Text(
             "Oops! Order Failed",
@@ -182,7 +183,7 @@ Widget buildFailedDialog(BuildContext context) {
             textAlign: TextAlign.center,
           ),
 
-          SizedBox(height: 10),
+          Gap(20),
 
           Text(
             "Something went terribly wrong.",
@@ -195,7 +196,9 @@ Widget buildFailedDialog(BuildContext context) {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(vertical: 14),
@@ -210,17 +213,19 @@ Widget buildFailedDialog(BuildContext context) {
             ),
           ),
 
-          SizedBox(height: 10),
+          Gap(10),
 
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              
+            },
             child: Text(
               "Back to home",
               style: TextStyle(fontSize: 15, color: Colors.black54),
             ),
           ),
 
-          SizedBox(height: 15),
+         Gap(15),
         ],
       ),
     ),

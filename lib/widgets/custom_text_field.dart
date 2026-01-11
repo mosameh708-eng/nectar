@@ -34,7 +34,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      validator: (v) => "please fill this",
+      validator: (v) {
+        if (v == null||v.isEmpty) {
+          return "please fill this";
+        }
+
+      },
       obscureText: _obscureText,
 
       decoration: InputDecoration(
