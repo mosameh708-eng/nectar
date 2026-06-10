@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:nectar/product_data/product_model.dart';
-
 import 'custom_text.dart';
 
 class CustomCartCheckout extends StatefulWidget {
@@ -27,7 +25,13 @@ class CustomCartCheckout extends StatefulWidget {
 }
 
 class _CustomCartCheckoutState extends State<CustomCartCheckout> {
-  int qty = 1;
+  late int qty;
+
+  @override
+  void initState() {
+    super.initState();
+    qty = widget.qty;
+  }
 
   void incrementnumber() {
     setState(() {
@@ -41,14 +45,6 @@ class _CustomCartCheckoutState extends State<CustomCartCheckout> {
         qty--;
       }
     });
-  }
-
-  void removeicon(index){
-    final item=ProductModel.products[index];
-    setState(() {
-      ProductModel.products.removeAt(index);
-    });
-
   }
 
 
@@ -77,7 +73,7 @@ class _CustomCartCheckoutState extends State<CustomCartCheckout> {
               ),
               child: Row(
                 children: [
-                  Image.asset(widget.image, width: 150),
+                  Image.asset(widget.image, width: 120),
                   Gap(60),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),

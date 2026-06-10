@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:nectar/screens/shop.dart';
 import 'package:nectar/widgets/Custom_button.dart';
 import 'package:nectar/widgets/custom_text.dart';
 

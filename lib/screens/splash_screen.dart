@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nectar/screens/on_bording.dart';
+import 'package:nectar/auth/log_in.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -33,10 +33,10 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const OnBording()),
+        MaterialPageRoute(builder: (_) => const LogIn()),
       );
     });
   }

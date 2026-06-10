@@ -35,10 +35,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       controller: widget.controller,
       validator: (v) {
-        if (v == null||v.isEmpty) {
+        if (v == null || v.isEmpty) {
           return "please fill this";
         }
-
+        return null;
       },
       obscureText: _obscureText,
 

@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:nectar/product_data/product_model.dart';
+import 'package:nectar/root.dart';
 import 'package:nectar/screens/product_details.dart';
-import 'package:nectar/widgets/cart/add_to.dart';
 import 'package:nectar/widgets/custom_text.dart';
 
 class CustomCart extends StatelessWidget {
@@ -13,73 +12,117 @@ class CustomCart extends StatelessWidget {
     required this.name,
     required this.qty,
     required this.price,
+    required this.nutritions,
     this.bordercolor,
     this.containercolor,
-    required this.nutritions,
   });
-  final String image, desc, name,nutritions;
-  final int qty, price;
+
+  final String image;
+  final String desc;
+  final String name;
+  final String nutritions;
+  final int qty;
+  final int price;
   final Color? bordercolor;
   final Color? containercolor;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => ProductDetails(
-              image: image,
-              desc: desc,
-              name: name,
-              qty: qty,
-              price: price,
-              nutritions: nutritions,
-              fav:  false,
+    return Card(
+      elevation: 2,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(color: bordercolor ?? Colors.grey.shade200),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ProductDetails(
+                image: image,
+                desc: desc,
+                name: name,
+                qty: qty,
+                price: price,
+                nutritions: nutritions,
+                fav: false,
+              ),
             ),
-          ),
-        );
-      },
-      child: Card(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Gap(10),
-            Expanded(
-              child: Image.asset(image, width: 160, fit: BoxFit.contain),
-            ),
-            Gap(5),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(text: name, color: Colors.black),
-                CustomText(text: "${qty.toString()}k", color: Colors.grey),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.contain,
+                  width: 150,
+                  height: 150,
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              CustomText(text: name, color: Colors.black),
+
+              const SizedBox(height: 4),
+
+              Text(
+                "${qty}kg",
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+              ),
+
+              const Spacer(),
+
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(
-                    text: "\$${price.toString()}",
-                    color: Colors.black,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 7, vertical: 9),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xff53B175),
+                  CustomText(text: "\$$price", color: Colors.black),
+
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      ProductModel.addToCart(
+                        ProductModel(
+                          image: image,
+                          nutritious: nutritions,
+                          desc: desc,
+                          name: name,
+                          qty: qty,
+                          price: price,
+                        ),
+                        1,
+                      );
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              Root(initialPage: 1, zone: Root.currentZone),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff53B175),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
                     ),
-                    child: Icon(Icons.add, color: Colors.white),
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

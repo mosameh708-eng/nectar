@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:nectar/widgets/cart/cart.dart';
+import 'package:nectar/product_data/product_model.dart';
+import 'package:nectar/root.dart';
 import 'package:nectar/widgets/Custom_button.dart';
-import 'package:nectar/widgets/cart/custom_cart.dart';
 import 'package:nectar/widgets/custom_navigate.dart';
 import 'package:nectar/widgets/custom_text.dart';
 
@@ -59,7 +59,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body:
+      Column(
         children: [
           Container(
             width: double.infinity,
@@ -73,21 +74,37 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             child: Column(
               children: [
+                Gap(20),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 12,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomNavigate(),
-                      SvgPicture.asset("assets/svgs/Vector.svg"),
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Row(
+                      children: [
+                        CustomNavigate(),
+                        Spacer()
+                      ],
+                    ),
                   ),
                 ),
                 const Gap(20),
-                Image.asset(widget.image, width: 150, fit: BoxFit.cover),
+                Expanded(
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        widget.image,
+                        width: 220,
+                        height: 160,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -110,15 +127,30 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
 
                         /// ❤️ Favorite Icon
-                        GestureDetector(
-                          onTap: () {
+                        IconButton(
+                          onPressed: () {
                             setState(() {
                               isFav = !isFav;
+                              if (isFav) {
+                                ProductModel.addToFavorites(
+                                  ProductModel(
+                                    image: widget.image,
+                                    nutritious: widget.nutritions,
+                                    desc: widget.desc,
+                                    name: widget.name,
+                                    qty: widget.qty,
+                                    price: widget.price,
+                                  ),
+                                );
+                              } else {
+                                ProductModel.removeFromFavorites(widget.name);
+                              }
                             });
                           },
-                          child: SvgPicture.asset(
-                            "assets/svgs/bookmark 1.svg",
+                          icon: Icon(
+                            Icons.favorite,
                             color: isFav ? Colors.red : Colors.grey,
+                            size: 28,
                           ),
                         ),
                       ],
@@ -148,7 +180,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: 40,
                               width: 40,
                               decoration: BoxDecoration(
-                                border: Border.all(color: const Color(0xffE2E2E2)),
+                                border: Border.all(
+                                  color: const Color(0xffE2E2E2),
+                                ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               alignment: Alignment.center,
@@ -160,7 +194,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                             const Gap(10),
                             GestureDetector(
                               onTap: incrementnumber,
-                              child: SvgPicture.asset("assets/svgs/Vector (1).svg"),
+                              child: SvgPicture.asset(
+                                "assets/svgs/Vector (1).svg",
+                              ),
                             ),
                           ],
                         ),
@@ -197,7 +233,10 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                     Row(
                       children: [
-                        const CustomText(text: "Nutritions", color: Colors.black),
+                        const CustomText(
+                          text: "Nutritions",
+                          color: Colors.black,
+                        ),
                         const Spacer(),
                         CustomText(
                           text: widget.nutritions,
@@ -227,17 +266,24 @@ class _ProductDetailsState extends State<ProductDetails> {
                       svg: '',
                       fontcolor: Colors.white,
                       onTap: () {
-                        Navigator.push(
+                        ProductModel.addToCart(
+                          ProductModel(
+                            image: widget.image,
+                            nutritious: widget.nutritions,
+                            desc: widget.desc,
+                            name: widget.name,
+                            qty: widget.qty,
+                            price: widget.price,
+                          ),
+                          qty,
+                        );
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => Cart(
-                              image: widget.image,
-                              desc: widget.desc,
-                              name: widget.name,
-                              qty: widget.qty,
-                              price: widget.price,
-                            ),
+                            builder: (_) =>
+                                Root(initialPage: 1, zone: Root.currentZone),
                           ),
+                          (route) => false,
                         );
                       },
                     ),

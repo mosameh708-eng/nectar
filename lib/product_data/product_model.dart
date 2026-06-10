@@ -6,7 +6,6 @@ class ProductModel {
   final int qty;
   final int price;
 
-
   ProductModel({
     required this.image,
     required this.nutritious,
@@ -15,6 +14,54 @@ class ProductModel {
     required this.qty,
     required this.price,
   });
+
+  static List<ProductModel> cart = [];
+  static List<ProductModel> favorites = [];
+  
+  static String? currentUsername;
+  static String? currentEmail;
+
+  static void addToCart(ProductModel product, int quantity) {
+    cart.add(ProductModel(
+      image: product.image,
+      nutritious: product.nutritious,
+      desc: product.desc,
+      name: product.name,
+      qty: quantity,
+      price: product.price,
+    ));
+  }
+
+  static int get cartTotal => cart.fold(0, (sum, item) => sum + item.price * item.qty);
+
+  static void clearCart() {
+    cart.clear();
+  }
+
+  static void addToFavorites(ProductModel product) {
+    if (!isFavorite(product.name)) {
+      favorites.add(product);
+    }
+  }
+
+  static void removeFromFavorites(String productName) {
+    favorites.removeWhere((item) => item.name == productName);
+  }
+
+  static bool isFavorite(String productName) {
+    return favorites.any((item) => item.name == productName);
+  }
+
+  static void setUser(String username, String email) {
+    currentUsername = username;
+    currentEmail = email;
+  }
+
+  static void clearUser() {
+    currentUsername = null;
+    currentEmail = null;
+  }
+
   static List<ProductModel> products = [
     ProductModel(
         image: "assets/product/banana.png",

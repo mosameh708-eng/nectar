@@ -1,87 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 import 'package:nectar/product_data/product_model.dart';
-import 'package:nectar/widgets/cart/add_to.dart';
 import 'package:nectar/widgets/cart/custom_cart.dart';
 import 'package:nectar/widgets/custom_search_text_field.dart';
 import 'package:nectar/widgets/custom_text.dart';
 
-class Shop extends StatelessWidget {
+class Shop extends StatefulWidget {
   const Shop({super.key, required this.zones});
   final String zones;
 
   @override
+  State<Shop> createState() => _ShopState();
+}
+
+class _ShopState extends State<Shop> {
+  final TextEditingController searchController = TextEditingController();
+  late List<ProductModel> filteredProducts;
+
+  @override
+  void initState() {
+    super.initState();
+    filteredProducts = List<ProductModel>.from(ProductModel.products);
+  }
+
+  void _filterProducts(String query) {
+    final normalizedQuery = query.trim().toLowerCase();
+    setState(() {
+      if (normalizedQuery.isEmpty) {
+        filteredProducts = List<ProductModel>.from(ProductModel.products);
+      } else {
+        filteredProducts = ProductModel.products.where((product) {
+          final name = product.name.toLowerCase();
+          final desc = product.desc.toLowerCase();
+          return name.contains(normalizedQuery) ||
+              desc.contains(normalizedQuery);
+        }).toList();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Gap(10),
-              SvgPicture.asset("assets/svgs/Group.svg", width: 30),
-              Gap(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
                 children: [
-                  SvgPicture.asset("assets/svgs/Exclude.svg", width: 20),
-                  Gap(10),
-                  CustomText(text: zones, color: Color(0xff4C4F4D)),
-                ],
-              ),
+                  const SizedBox(height: 30),
 
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: CustomSearchTextField(),
-              ),
-              Gap(15),
-              Image.asset("assets/logo/banner.png"),
-              Gap(10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomText(
-                    text: "Exclusive Offer",
-                    color: Colors.black,
-                    fontsize: 24,
+                  SvgPicture.asset("assets/svgs/Group.svg", width: 40),
+
+                  const SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset("assets/svgs/Exclude.svg", width: 20),
+                      const SizedBox(width: 10),
+                      CustomText(
+                        text: widget.zones,
+                        color: const Color(0xff4C4F4D),
+                      ),
+                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: CustomText(
-                      text: "See all",
-                      color: Color(0xff53B175),
-                      fontsize: 16,
-                    ),
+
+                  const SizedBox(height: 15),
+
+                  Image.asset("assets/logo/banner.png", fit: BoxFit.cover),
+
+                  const SizedBox(height: 20),
+
+                  CustomSearchTextField(
+                    controller: searchController,
+                    onChanged: _filterProducts,
                   ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
-              Gap(20),
-              GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                shrinkWrap: true,
-                itemCount: ProductModel.products.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.9,
-                  crossAxisSpacing: 5,
-                ),
-                itemBuilder: (context, index) {
-                  final item = ProductModel.products[index];
-                  return CustomCart(
-                    image: item.image,
-                    desc: item.desc,
-                    name: item.name,
-                    qty: item.qty,
-                    price: item.price,
-                    nutritions: item.nutritious,
-                  );
-                },
-              ),
-            ],
+            ),
           ),
-        ),
+
+          SliverPadding(
+            padding: const EdgeInsets.all(12),
+            sliver: SliverGrid(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final item = filteredProducts[index];
+                return CustomCart(
+                  image: item.image,
+                  desc: item.desc,
+                  name: item.name,
+                  qty: item.qty,
+                  price: item.price,
+                  nutritions: item.nutritious,
+                );
+              }, childCount: filteredProducts.length),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.65,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

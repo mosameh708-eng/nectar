@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:nectar/auth/sign_up.dart';
 import 'package:nectar/shared/constant.dart';
 
 part 'signup_state.dart';
@@ -12,19 +10,20 @@ class SignupCubit extends Cubit<SignupState> {
   SignupCubit() : super(SignupInitial());
   static SignupCubit get(context)=>BlocProvider.of(context);
   final dio= Dio();
-  SignUp( String ?name,String ?email,String? password ){
+  Future<void> SignUp(String? name, String? email, String? password) async {
     emit(SignupLoading());
-    try{
-      final response = dio.post("$baseUrl/register",
-      data: {
-        "name" : name,
-        "email" :email,
-        "password":password,
-      }
+    try {
+      final response = await dio.post(
+        "$baseUrl/register",
+        data: {
+          "name": name,
+          "email": email,
+          "password": password,
+        },
       );
+      print("Signup response: $response");
       emit(SignupSuccess());
-      
-    }catch(e){
+    } catch (e) {
       print("message response of signup $e");
       emit(SignupError(error: e.toString()));
     }
